@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Product_Management_System.Data;
+
 namespace Product_Management_System
 {
     public class Program
@@ -9,7 +12,13 @@ namespace Product_Management_System
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            var app = builder.Build();
+			// Register the DbContext with dependency injection
+            builder.Services.AddDbContext<AppDbContext>(options=>
+            options.UseSqlServer(
+				builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
+			var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
