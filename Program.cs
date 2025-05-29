@@ -14,7 +14,6 @@ namespace Product_Management_System
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-			// Register the DbContext with dependency injection
             builder.Services.AddDbContext<AppDbContext>(options=>
             options.UseSqlServer(
 				builder.Configuration.GetConnectionString("DefaultConnection")));
