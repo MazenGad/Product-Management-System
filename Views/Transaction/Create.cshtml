@@ -7,7 +7,9 @@
     <div class="col-md-8 offset-md-2">
         <div class="card shadow-sm border-0 rounded-3">
             <div class="card-header bg-dark text-white">
-                <h4 class="mb-0">💰 Add New Transaction</h4>
+                <h4 class="mb-0">
+                    <i class="fas fa-money-bill-wave icon-gold"></i> Add New Transaction
+                </h4>
             </div>
             <div class="card-body">
                 <form id="transactionForm">
@@ -72,7 +74,7 @@
             $.get(`/Product/GetProduct?id=${productId}`, function (data) {
                 selectedPrice = parseFloat(data.price);
                 selectedUnit = data.unit;
-                availableQuantity = parseInt(data.available);
+                availableQuantity = parseInt(data.initialQuantity);
 
                 $("#unit").val(selectedUnit);
                 calculateTotal();
@@ -100,9 +102,10 @@
 
             if (quantity > availableQuantity) {
                 quantityInput.addClass("is-invalid");
-                quantityInput.after(`<div id="quantityFeedback" class="invalid-feedback">
-                    ⚠️ Quantity exceeds available stock (${availableQuantity} units available).
+              quantityInput.after(`<div id="quantityFeedback" class="invalid-feedback">
+                <i class="fas fa-exclamation-triangle"></i> Quantity exceeds available stock (${availableQuantity} units available).
                 </div>`);
+
             }
         }
 

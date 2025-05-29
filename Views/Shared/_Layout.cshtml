@@ -7,12 +7,15 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Product_Management_System.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
             <div class="container">
-                <a class="navbar-brand fw-bold" asp-controller="Product" asp-action="Create">📦 Product Manager</a>
+                <a class="navbar-brand fw-bold" asp-controller="Product" asp-action="Create">
+                    <i class="fas fa-box icon-gold "></i> Product Manager
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -20,15 +23,22 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Product" asp-action="Create">➕ Add Product</a>
+                            <a class="nav-link text-white" asp-controller="Product" asp-action="Create">
+                                <i class="fas fa-plus icon-green"></i> Add Product
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Transaction" asp-action="Create">💰 Add Transaction</a>
+                            <a class="nav-link text-white" asp-controller="Transaction" asp-action="Create">
+                                <i class="fas fa-money-bill-wave icon-gold"></i> Add Transaction
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Transaction" asp-action="Overview">📊 Transaction Overview</a>
+                            <a class="nav-link text-white" asp-controller="Transaction" asp-action="Overview">
+                                <i class="fas fa-chart-bar icon-info"></i> Transaction Overview
+                            </a>
                         </li>
                     </ul>
+
                 </div>
             </div>
         </nav>
@@ -42,7 +52,7 @@
 
     <footer class="footer mt-auto py-3 bg-light border-top">
         <div class="container text-center">
-            <span class="text-muted">© 2025 - Product Management System</span>
+            <span class="text-muted">&copy; 2025 - Product Management System</span>
         </div>
     </footer>
 

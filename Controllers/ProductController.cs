@@ -44,12 +44,7 @@ namespace Product_Management_System.Controllers
 			if (product == null)
 				return NotFound();
 
-			return Json(new
-			{
-				price = product.Price,
-				unit = product.Unit,
-				available = product.InitialQuantity
-			});
+			return Json(product);
 		}
 
 
