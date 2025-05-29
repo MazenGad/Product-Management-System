@@ -1,0 +1,139 @@
+﻿@{
+    ViewData["Title"] = "Add Transaction";
+    var products = ViewBag.Products as List<Product_Management_System.DTOs.Product.GetProductDto>;
+}
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-header bg-dark text-white">
+                <h4 class="mb-0">💰 Add New Transaction</h4>
+            </div>
+            <div class="card-body">
+                <form id="transactionForm">
+                    <div class="mb-3">
+                        <label class="form-label">Product</label>
+                        <select name="productId" id="productId" class="form-select" required>
+                            <option value="">-- Select Product --</option>
+                            @foreach (var product in products)
+                            {
+                                <option value="@product.Id"
+                                        price="@product.Price"
+                                        unit="@product.Unit"
+                                        available="@product.InitialQuantity">
+                                    @product.Name
+                                </option>
+
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Quantity</label>
+                        <input type="number" name="quantity" id="quantity" class="form-control" required />
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label class="form-label">Date</label>
+                        <input type="date" name="transactionDate" id="transactionDate" class="form-control" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Unit</label>
+                        <input type="text" id="unit" class="form-control" disabled />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Total Price</label>
+                        <input type="text" id="totalPrice" class="form-control" disabled />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Add Transaction</button>
+                </form>
+
+                <div id="message" class="mt-3"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        let selectedPrice = 0;
+        let selectedUnit = "";
+        let availableQuantity = 0;
+
+        $("#productId").change(function () {
+            const productId = $(this).val();
+            if (!productId) return;
+
+            $.get(`/Product/GetProduct?id=${productId}`, function (data) {
+                selectedPrice = parseFloat(data.price);
+                selectedUnit = data.unit;
+                availableQuantity = parseInt(data.available);
+
+                $("#unit").val(selectedUnit);
+                calculateTotal();
+                validateQuantity();
+            });
+        });
+
+        $("#quantity").on("input", function () {
+            calculateTotal();
+            validateQuantity();
+        });
+
+        function calculateTotal() {
+            const quantity = parseFloat($("#quantity").val() || 0);
+            const total = (quantity * selectedPrice).toFixed(2);
+            $("#totalPrice").val(total);
+        }
+
+        function validateQuantity() {
+            const quantityInput = $("#quantity");
+            const quantity = parseInt(quantityInput.val() || 0);
+
+            quantityInput.removeClass("is-invalid");
+            $("#quantityFeedback").remove();
+
+            if (quantity > availableQuantity) {
+                quantityInput.addClass("is-invalid");
+                quantityInput.after(`<div id="quantityFeedback" class="invalid-feedback">
+                    ⚠️ Quantity exceeds available stock (${availableQuantity} units available).
+                </div>`);
+            }
+        }
+
+        $("#transactionForm").submit(function (e) {
+            e.preventDefault();
+
+            const formData = {
+                productId: parseInt($("#productId").val()),
+                quantity: parseInt($("#quantity").val()),
+                transactionDate: $("#transactionDate").val()
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Create", "Transaction")",
+                contentType: "application/json",
+                data: JSON.stringify(formData),
+                success: function (response) {
+                    if (response.success) {
+                        $("#message").html(`<div class="alert alert-success">${response.message}</div>`);
+                        $("#transactionForm")[0].reset();
+                        $("#totalPrice").val("");
+                        $("#unit").val("");
+                    } else {
+                        $("#message").html(`<div class="alert alert-danger">${response.message}</div>`);
+                    }
+                },
+                error: function () {
+                    $("#message").html(`<div class="alert alert-danger">Unexpected error occurred.</div>`);
+                }
+            });
+        });
+    </script>
+}

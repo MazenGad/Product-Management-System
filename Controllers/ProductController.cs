@@ -37,6 +37,21 @@ namespace Product_Management_System.Controllers
 			return Json(new { success = false, message = "Invalid data submitted." });
 		}
 
+		[HttpGet]
+		public async Task<IActionResult> GetProduct(int id)
+		{
+			var product = await _productRepository.GetProductByIdAsync(id);
+			if (product == null)
+				return NotFound();
+
+			return Json(new
+			{
+				price = product.Price,
+				unit = product.Unit,
+				available = product.InitialQuantity
+			});
+		}
+
 
 	}
 }

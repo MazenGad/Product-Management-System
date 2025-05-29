@@ -1,4 +1,5 @@
-﻿using Product_Management_System.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Product_Management_System.Data;
 using Product_Management_System.DTOs.Product;
 using Product_Management_System.Entities;
 using Product_Management_System.Repository.Services.Interfaces;
@@ -30,11 +31,55 @@ namespace Product_Management_System.Repository.Services.Implementation
 			}
 			catch (Exception ex)
 			{
-				// Log the exception (ex) as needed
 				return false;
 			}
 
 
+		}
+
+		public async Task<GetProductDto> GetProductByIdAsync(int id)
+		{
+			try
+			{
+				return await _context.Products
+					.Where(p => p.Id == id)
+					.Select(p => new GetProductDto
+					{
+						Id = p.Id,
+						Name = p.Name,
+						Price = p.Price,
+						Unit = p.Unit,
+						InitialQuantity = p.InitialQuantity
+					})
+					.FirstOrDefaultAsync();
+			}
+			catch (Exception ex)
+			{
+				return null;
+			}
+
+		}
+
+		public async Task<ICollection<GetProductDto>> GetProductsAsync()
+		{
+			try
+			{
+				return 
+					await _context.Products
+					.Select(p => new GetProductDto
+					{
+						Id = p.Id,
+						Name = p.Name,
+						Price = p.Price,
+						Unit = p.Unit,
+						InitialQuantity = p.InitialQuantity
+					})
+					.ToListAsync();
+			}
+			catch (Exception ex)
+			{
+				return new List<GetProductDto>();
+			}
 		}
 	}
 }

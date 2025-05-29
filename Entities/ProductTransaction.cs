@@ -11,7 +11,7 @@ namespace Product_Management_System.Entities
 
 		public Product Product { get; set; }
 
-		public DateTime TransactionDate { get; set; } = DateTime.Now;
+		public DateTime TransactionDate { get; set; } 
 
 		[Required]
 		public int Quantity { get; set; }

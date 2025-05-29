@@ -21,6 +21,7 @@ namespace Product_Management_System
 
 
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
+			builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 
 			var app = builder.Build();
 

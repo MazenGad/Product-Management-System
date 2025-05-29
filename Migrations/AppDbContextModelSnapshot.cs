@@ -51,7 +51,7 @@ namespace Product_Management_System.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Product_Management_System.Entities.ProductTransaction", b =>
@@ -78,7 +78,7 @@ namespace Product_Management_System.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductTransactions");
+                    b.ToTable("ProductTransactions", (string)null);
                 });
 
             modelBuilder.Entity("Product_Management_System.Entities.ProductTransaction", b =>
