@@ -1,4 +1,5 @@
-﻿using Product_Management_System.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Product_Management_System.Data;
 using Product_Management_System.DTOs.Transactions;
 using Product_Management_System.Repository.Services.Interfaces;
 
@@ -45,6 +46,30 @@ namespace Product_Management_System.Repository.Services.Implementation
 				return false;
 			}
 
+		}
+
+		public async Task<ICollection<GetTransactionDto>> GetTransactionsAsync(DateTime? date)
+		{
+			var query = _context.ProductTransactions
+				.Include(pt => pt.Product)
+				.AsQueryable();
+
+			if (date.HasValue)
+			{
+				query = query.Where(pt => pt.TransactionDate.Date == date.Value.Date);
+
+			}
+
+			var transactions = await query.Select(pt => new GetTransactionDto
+				{
+					ProductName = pt.Product.Name,
+					Quantity = pt.Quantity,
+					Unit = pt.Product.Unit,
+					TotalPrice = pt.TotalPrice,
+					Date = pt.TransactionDate
+				})
+				.ToListAsync();
+			return transactions;
 		}
 	}
 }

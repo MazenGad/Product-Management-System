@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "Transaction Overview";
+}
+
+<div class="row">
+    <div class="col-md-10 offset-md-1">
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">📊 Transactions Overview</h4>
+                <input type="date" id="filterDate" class="form-control w-auto" />
+            </div>
+            <div class="card-body">
+                <div id="transactionTable"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            loadTransactions(); // Load all on start
+
+            $("#filterDate").on("change", function () {
+                loadTransactions($(this).val());
+            });
+
+            function loadTransactions(dateFilter = "") {
+                $.get(`/Transaction/GetTransactions?date=${dateFilter}`, function (data) {
+                    let html = "";
+
+                    if (data.length === 0) {
+                        html = "<div class='alert alert-warning'>No transactions found.</div>";
+                    } else {
+                        html = `
+                            <table class="table table-bordered table-striped">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Quantity</th>
+                                        <th>Unit</th>
+                                        <th>Total Price</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                        `;
+
+                        data.forEach(trx => {
+                            html += `
+                                <tr>
+                                    <td>${trx.productName}</td>
+                                    <td>${trx.quantity}</td>
+                                    <td>${trx.unit}</td>
+                                    <td>${trx.totalPrice.toFixed(2)}</td>
+                                    <td>${new Date(trx.date).toLocaleDateString()}</td>
+                                </tr>
+                            `;
+                        });
+
+                        html += "</tbody></table>";
+                    }
+
+                    $("#transactionTable").html(html);
+                });
+            }
+        });
+    </script>
+}

@@ -46,5 +46,20 @@ namespace Product_Management_System.Controllers
 
 		}
 
+		[HttpGet]
+		public async Task<IActionResult> Overview()
+		{
+			var transactions = await _transactionRepository.GetTransactionsAsync(null);
+			return View(transactions);
+		}
+
+
+		[HttpGet]
+		public async Task<IActionResult> GetTransactions(DateTime? date)
+		{
+			var transactions = await _transactionRepository.GetTransactionsAsync(date);
+			return Json(transactions);
+		}
+
 	}
 }
