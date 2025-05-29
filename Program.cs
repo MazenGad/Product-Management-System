@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Product_Management_System.Data;
+using Product_Management_System.Repository.Services.Implementation;
+using Product_Management_System.Repository.Services.Interfaces;
 
 namespace Product_Management_System
 {
@@ -17,6 +19,8 @@ namespace Product_Management_System
             options.UseSqlServer(
 				builder.Configuration.GetConnectionString("DefaultConnection")));
 
+
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 			var app = builder.Build();
 
@@ -36,7 +40,7 @@ namespace Product_Management_System
             app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
+	            pattern: "{controller=Product}/{action=Create}/{id?}")
                 .WithStaticAssets();
 
             app.Run();
