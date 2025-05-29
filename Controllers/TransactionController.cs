@@ -28,6 +28,8 @@ namespace Product_Management_System.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Create([FromBody] AddTransactionDto transactionDto)
 		{
+			Console.WriteLine($"Date Received: {transactionDto.Date}");
+
 			if (!ModelState.IsValid)
 			{
 				return Json(new { success = false, message = "Invalid data submitted." });

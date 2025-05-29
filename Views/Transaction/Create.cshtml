@@ -108,12 +108,15 @@
 
         $("#transactionForm").submit(function (e) {
             e.preventDefault();
+            
+            const rawDate = $("#transactionDate").val();
+            const formattedDate = rawDate ? new Date(rawDate).toISOString() : null;
 
             const formData = {
                 productId: parseInt($("#productId").val()),
                 quantity: parseInt($("#quantity").val()),
-                transactionDate: $("#transactionDate").val()
-            };
+                date: formattedDate
+                };
 
             $.ajax({
                 type: "POST",
