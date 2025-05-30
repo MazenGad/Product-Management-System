@@ -23,7 +23,7 @@
                                         price="@product.Price"
                                         unit="@product.Unit"
                                         available="@product.InitialQuantity">
-                                    @product.Name
+                                    @product.Name @(product.InitialQuantity == 0 ? "(Out of Stock)" : "")
                                 </option>
 
                             }

@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Add New Product";
+    @model Product_Management_System.DTOs.Product.AddProductDto
 }
 
 <div class="row">
@@ -14,19 +15,23 @@
                 <form id="productForm">
                     <div class="mb-3">
                         <label class="form-label">Product Name</label>
-                        <input type="text" name="name" class="form-control" required />
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Unit</label>
-                        <input type="text" name="unit" class="form-control" required />
+                        <input asp-for="Unit" class="form-control" />
+                        <span asp-validation-for="Unit" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Price</label>
-                        <input type="number" name="price" step="0.01" class="form-control" required />
+                        <input asp-for="Price" class="form-control" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Initial Quantity</label>
-                        <input type="number" name="initialQuantity" class="form-control" required />
+                        <input asp-for="InitialQuantity" class="form-control" />
+                        <span asp-validation-for="InitialQuantity" class="text-danger"></span>
                     </div>
                     <button type="submit" class="btn btn-primary w-100">Add Product</button>
                 </form>
@@ -38,15 +43,21 @@
 </div>
 
 @section Scripts {
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script>
         $("#productForm").submit(function (e) {
             e.preventDefault();
+            
+            var form = $("#productForm");
+
+            if (!form.valid()) {
+                return;
+            }
             var formData = {
-                name: $("input[name='name']").val(),
-                unit: $("input[name='unit']").val(),
-                price: parseFloat($("input[name='price']").val()),
-                initialQuantity: parseInt($("input[name='initialQuantity']").val())
+                name: $("input[name='Name']").val(),
+                unit: $("input[name='Unit']").val(),
+                price: parseFloat($("input[name='Price']").val()),
+                initialQuantity: parseInt($("input[name='InitialQuantity']").val())
             };
 
             $.ajax({
@@ -57,7 +68,8 @@
                 success: function (response) {
                     if (response.success) {
                         $("#message").html(`<div class="alert alert-success">${response.message}</div>`);
-                        $("#productForm")[0].reset();
+                         form[0].reset();
+                         form.find(".text-danger").empty(); 
                     } else {
                         $("#message").html(`<div class="alert alert-danger">${response.message}</div>`);
                     }
