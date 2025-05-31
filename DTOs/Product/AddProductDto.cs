@@ -21,5 +21,8 @@ namespace Product_Management_System.DTOs.Product
 		[Required]
 		[Range(1, int.MaxValue, ErrorMessage = "Initial quantity must be at least 1.")]
 		public int InitialQuantity { get; set; }
+
+		[Required(ErrorMessage = "Generated code is required.")]
+		public string GeneratedCode { get; set; }  
 	}
 }

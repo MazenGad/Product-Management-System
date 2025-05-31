@@ -14,6 +14,14 @@
             <div class="card-body">
                 <form id="productForm">
                     <div class="mb-3">
+                        <label class="form-label">Generated Code</label>
+                        <input id="GeneratedCode"
+                               name="generatedCode"
+                               class="form-control bg-light text-muted border-1"
+                               value="@ViewBag.GeneratedCode"
+                               readonly />
+                    </div>
+                    <div class="mb-3">
                         <label class="form-label">Product Name</label>
                         <input asp-for="Name" class="form-control" />
                         <span asp-validation-for="Name" class="text-danger"></span>
@@ -57,7 +65,8 @@
                 name: $("input[name='Name']").val(),
                 unit: $("input[name='Unit']").val(),
                 price: parseFloat($("input[name='Price']").val()),
-                initialQuantity: parseInt($("input[name='InitialQuantity']").val())
+                initialQuantity: parseInt($("input[name='InitialQuantity']").val()),
+                generatedCode: $("input[name='generatedCode']").val()
             };
 
             $.ajax({
@@ -69,7 +78,10 @@
                     if (response.success) {
                         $("#message").html(`<div class="alert alert-success">${response.message}</div>`);
                          form[0].reset();
-                         form.find(".text-danger").empty(); 
+                         form.find(".text-danger").empty();
+                          $.get("@Url.Action("GenerateCode", "Product")", function (newCode) {
+                                $("#GeneratedCode").val(newCode);
+                            });
                     } else {
                         $("#message").html(`<div class="alert alert-danger">${response.message}</div>`);
                     }

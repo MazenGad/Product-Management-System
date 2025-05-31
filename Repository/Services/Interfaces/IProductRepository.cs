@@ -9,5 +9,6 @@ namespace Product_Management_System.Repository.Services.Interfaces
 		public Task<ICollection<GetProductDto>> GetProductsAsync();
 
 		public Task<GetProductDto> GetProductByIdAsync(int id);
+		public Task<string> GenerateUniqueCodeAsync();
 	}
 }

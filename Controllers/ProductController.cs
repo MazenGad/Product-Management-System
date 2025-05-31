@@ -16,10 +16,20 @@ namespace Product_Management_System.Controllers
 			_productRepository = productRepository;
 		}
 		[HttpGet]
-		public IActionResult Create()
-        {
-            return View();
-        }
+		public async Task<IActionResult> GenerateCode()
+		{
+			var generatedCode = await _productRepository.GenerateUniqueCodeAsync();
+			return Json(generatedCode);
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> Create()
+		{
+			var generatedCode = await _productRepository.GenerateUniqueCodeAsync();
+			ViewBag.GeneratedCode = generatedCode;
+			return View();
+		}
+
 
 		[HttpPost]
 		public async Task<IActionResult> Create([FromBody] AddProductDto productDto)

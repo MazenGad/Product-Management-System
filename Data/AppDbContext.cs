@@ -23,6 +23,10 @@ namespace Product_Management_System.Data
 				.HasMaxLength(50)
 				.IsRequired();
 
+			modelBuilder.Entity<Product>()
+				.HasIndex(p => p.GeneratedCode)
+				.IsUnique();
+
 		}
 
 		public DbSet<Product> Products { get; set; }

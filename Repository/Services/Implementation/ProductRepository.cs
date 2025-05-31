@@ -13,17 +13,36 @@ namespace Product_Management_System.Repository.Services.Implementation
 		{
 			_context = context;
 		}
+		public async Task<string> GenerateUniqueCodeAsync()
+		{
+			string code;
+			bool exists;
+
+			do
+			{
+				code = $"PR-{Guid.NewGuid().ToString("N").Substring(0, 8).ToUpper()}";
+				exists = await _context.Products.AnyAsync(p => p.GeneratedCode == code);
+			}
+			while (exists);
+
+			return code;
+		}
+
 		public async Task<bool> CreateProductAsync(AddProductDto productDto)
 		{
 			try
 			{
+				var codeExists = await _context.Products.AnyAsync(p => p.GeneratedCode == productDto.GeneratedCode);
+				if (codeExists)
+					return false;
+
 				var product = new Product
 				{
 					Name = productDto.Name,
 					Unit = productDto.Unit,
 					Price = productDto.Price,
 					InitialQuantity = productDto.InitialQuantity,
-					GeneratedCode = $"PR-{Guid.NewGuid().ToString("N").Substring(0, 8).ToUpper()}"
+					GeneratedCode = productDto.GeneratedCode
 				};
 				_context.Products.Add(product);
 				await _context.SaveChangesAsync();
@@ -33,8 +52,6 @@ namespace Product_Management_System.Repository.Services.Implementation
 			{
 				return false;
 			}
-
-
 		}
 		public async Task<GetProductDto> GetProductByIdAsync(int id)
 		{
