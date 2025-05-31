@@ -19,6 +19,12 @@ namespace Product_Management_System.Repository.Services.Implementation
 			{
 				return false;
 			}
+
+			if (dto.Date.HasValue && dto.Date.Value.Date > DateTime.Today)
+			{
+				return false;
+			}
+
 			if (dto.Quantity > product.InitialQuantity)
 			{
 				return false;
