@@ -35,6 +35,14 @@ function validateQuantity() {
     quantityInput.removeClass("is-invalid");
     $("#quantityFeedback").remove();
 
+    if (quantity < 0) {
+        quantityInput.addClass("is-invalid");
+        quantityInput.after(`<div id="quantityFeedback" class="invalid-feedback">
+            <i class="fas fa-exclamation-triangle"></i> Quantity cannot be negative.
+        </div>`);
+        return;
+    }
+
     if (quantity > availableQuantity) {
         quantityInput.addClass("is-invalid");
         quantityInput.after(`<div id="quantityFeedback" class="invalid-feedback">
@@ -42,6 +50,28 @@ function validateQuantity() {
         </div>`);
     }
 }
+
+function updateProductDropdown() {
+    $.get("/Transaction/GetAllProducts", function (products) {
+        const $dropdown = $("#productId");
+        $dropdown.empty();
+        $dropdown.append(`<option value="">-- Select Product --</option>`);
+
+        products.forEach(product => {
+            const outOfStockText = product.initialQuantity === 0 ? " (Out of Stock)" : "";
+            $dropdown.append(`
+                <option value="${product.id}"
+                        price="${product.price}"
+                        unit="${product.unit}"
+                        available="${product.initialQuantity}">
+                    ${product.name}${outOfStockText}
+                </option>
+            `);
+        });
+    });
+}
+
+
 
 $("#transactionForm").submit(function (e) {
     e.preventDefault();
@@ -73,6 +103,7 @@ $("#transactionForm").submit(function (e) {
                 $("#transactionForm")[0].reset();
                 $("#totalPrice").val("");
                 $("#unit").val("");
+                updateProductDropdown();
             } else {
                 $("#message").html(`<div class="alert alert-danger">${response.message}</div>`);
             }

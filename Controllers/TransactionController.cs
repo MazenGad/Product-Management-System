@@ -24,6 +24,13 @@ namespace Product_Management_System.Controllers
 			ViewBag.Products = await _productRepository.GetProductsAsync();
 			return View();
 		}
+		[HttpGet]
+		public async Task<IActionResult> GetAllProducts()
+		{
+			var products = await _productRepository.GetProductsAsync();
+			return Json(products);
+		}
+
 
 		[HttpPost]
 		public async Task<IActionResult> Create([FromBody] AddTransactionDto transactionDto)
